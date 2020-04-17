@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { connect } from "react-redux";
 import { postSmurf } from "../actions";
+import Smurfs from "./Smurfs";
+import { getSmurfs } from "../actions";
 
 const SmurfForm = (props) => {
   const [newSmurf, setNewSmurf] = useState({
@@ -21,13 +23,14 @@ const SmurfForm = (props) => {
 
   const submitForm = (e) => {
     e.preventDefault();
+    props.getSmurfs(newSmurf);
   };
 
   return (
     <div>
       <form onSubmit={submitForm}>
         <label htmlFor="smurfName">
-          name:
+          Name:
           <input
             type="text"
             name="name"
@@ -36,7 +39,7 @@ const SmurfForm = (props) => {
           />
         </label>
         <label htmlFor="smurfAge">
-          age:
+          Age:
           <input
             type="number"
             name="age"
@@ -45,7 +48,7 @@ const SmurfForm = (props) => {
           />
         </label>
         <label htmlFor="smurfHeight">
-          height:
+          Height:
           <input
             type="text"
             name="height"
@@ -57,6 +60,12 @@ const SmurfForm = (props) => {
           Add another Smurf to the village!
         </button>
       </form>
+      <div>
+        <h1>SMURF ARMY</h1>
+        {props.smurfs.map((item) => (
+          <Smurfs state={item} key={item.id} />
+        ))}
+      </div>
     </div>
   );
 };
@@ -64,7 +73,8 @@ const SmurfForm = (props) => {
 const mapStateToProps = (state) => {
   return {
     addingSmurf: state.addingSmurf,
+    smurfs: state.smurfs,
   };
 };
 
-export default connect(mapStateToProps, { postSmurf })(SmurfForm);
+export default connect(mapStateToProps, { postSmurf, getSmurfs })(SmurfForm);
